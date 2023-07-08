@@ -19,6 +19,7 @@ import org.springframework.integration.mqtt.support.DefaultPahoMessageConverter
 import org.springframework.integration.mqtt.support.MqttHeaders
 import org.springframework.messaging.MessageChannel
 import org.springframework.messaging.MessageHandler
+import org.springframework.integration.dsl.integrationFlow
 
 @Configuration
 class MqttIntegrationConfig(
@@ -109,4 +110,13 @@ class MqttIntegrationConfig(
             .channel(mqttOutboundChannel())
             .get()
     }
+
+//    @Bean
+//    fun mqttInbound() = integrationFlow(mqttChannelAdapter()) {
+//        handle {
+//            logger.info("payload=${it.payload}, headers=${it.headers}")
+//            it.payload
+//        }
+//        channel(mqttOutboundChannel())
+//    }
 }

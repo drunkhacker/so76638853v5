@@ -1,0 +1,8 @@
+mqtt:
+  server: 'tcp://localhost:1883'
+  client-id: mytestclient
+  qos: [0]
+  topics: ["mytest"]
+  username: guest
+  password: guest
+
