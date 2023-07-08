@@ -67,6 +67,7 @@ class MqttIntegrationConfig(
         adapter.setQos(*mqttConfig.qos.toIntArray())
         adapter.setConverter(pahoMessageConverter())
 
+        // XXX : `MessageChannels.direct()` throws "Dispatcher has no subscribers" error
         val outputChannel = MessageChannels.direct().get()
         adapter.outputChannel = outputChannel
         return adapter
