@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.boot.test.context.TestConfiguration
 import org.springframework.context.ApplicationContext
 import org.springframework.context.annotation.Bean
+import org.springframework.integration.config.EnableIntegration
 import org.springframework.integration.endpoint.MessageProducerSupport
 import org.springframework.integration.test.context.SpringIntegrationTest
 import org.springframework.messaging.MessageHandler
@@ -20,6 +21,7 @@ import java.util.*
 
 
 @TestConfiguration
+@EnableIntegration
 class MyTestConfig {
     @Bean
     fun mqttConfig(): MqttConfig {
