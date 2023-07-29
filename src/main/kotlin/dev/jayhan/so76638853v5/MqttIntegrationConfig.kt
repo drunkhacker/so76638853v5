@@ -68,9 +68,6 @@ class MqttIntegrationConfig(
         adapter.setQos(*mqttConfig.qos.toIntArray())
         adapter.setConverter(pahoMessageConverter())
 
-        // XXX : `MessageChannels.direct()` throws "Dispatcher has no subscribers" error
-        val outputChannel = MessageChannels.direct().get()
-        adapter.outputChannel = outputChannel
         return adapter
     }
 
@@ -94,29 +91,23 @@ class MqttIntegrationConfig(
 
     @Bean
     fun mqttOutbound(): IntegrationFlow = IntegrationFlows.from(mqttOutboundChannel())
-        .enrichHeaders { h -> h.headerFunction<String>(MqttHeaders.TOPIC) { msg -> "testtopic" } }
-        .transform<String, String> { "hello! $it" }
-        .handle(mqttOutboundHandler())
+        .enrichHeaders { h ->
+            h.headerFunction<String>(MqttHeaders.TOPIC) { msg ->
+                "testreply_${msg.payload[0]}"
+            }
+        }
+        .handle(mqttOutboundHandler(), { c -> c.id("mqttOutEndpoint") })
         .get()
 
 
     @Bean
-    fun mqttInbound(): IntegrationFlow {
+    fun mqttInbound(myMessageHandler: MyMessageHandler): IntegrationFlow {
         return IntegrationFlows.from(mqttChannelAdapter())
             .handle<String> { payload, headers ->
                 logger.info("payload=$payload, headers=$headers")
-                payload
+                myMessageHandler.handleMessage(payload)
             }
             .channel(mqttOutboundChannel())
             .get()
     }
-
-//    @Bean
-//    fun mqttInbound() = integrationFlow(mqttChannelAdapter()) {
-//        handle {
-//            logger.info("payload=${it.payload}, headers=${it.headers}")
-//            it.payload
-//        }
-//        channel(mqttOutboundChannel())
-//    }
 }

@@ -20,11 +20,13 @@ repositories {
 
 dependencies {
     implementation("org.springframework.integration:spring-integration-mqtt")
+
     implementation("org.springframework.boot:spring-boot-starter-integration")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.springframework.integration:spring-integration-test")
     testImplementation("io.mockk:mockk:1.9.3")
+    testImplementation("com.ninja-squad:springmockk:3.1.2")
 }
 
 dependencyManagement {
